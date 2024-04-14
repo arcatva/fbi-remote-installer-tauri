@@ -3,16 +3,22 @@
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
-use fbi_remote_installer_tauri::{list_files_with_path, FileMeta};
+mod connect;
+mod file;
 
 #[tauri::command(async)]
-async fn list_files() -> Result<Vec<FileMeta>, ()> {
-    Ok(list_files_with_path(".").await.unwrap())
+async fn list_files() -> Result<Vec<file::FileMeta>, ()> {
+    Ok(file::list_files(".").await.unwrap())
+}
+
+#[tauri::command(async)]
+async fn connect_tcp(addr: String) -> Result<String, String> {
+    Ok(connect::connect_tcp(addr).await?)
 }
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![list_files])
+        .invoke_handler(tauri::generate_handler![list_files, connect_tcp])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

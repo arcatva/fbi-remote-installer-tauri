@@ -1,8 +1,8 @@
 [package]
 name = "fbi-remote-installer-tauri"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "0.1.0"
+description = "A Tauri Based FBI remote installer"
+authors = ["arcatva"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -15,7 +15,9 @@ tauri = { version = "1", features = ["shell-open"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 chrono = "0.4.37"
-tokio = "1.37.0"
+tokio = { version = "1.37.0", features = ["full"] }
+
+
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!

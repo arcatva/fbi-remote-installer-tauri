@@ -8,11 +8,13 @@ function App() {
 
   async function list_files() {
     let result = await invoke("list_files");
+    console.log(result);
     setFiles(result);
   }
-  async function connect_3DS() {
-    let result = await invoke("connect_3DS");
-    console.log(result);
+  async function connect_tcp() {
+    invoke("connect_tcp", { addr: ip })
+      .then((result) => console.log(result))
+      .catch((err) => console.log(err));
   }
   useEffect(() => {
     list_files();
@@ -31,15 +33,18 @@ function App() {
         }}
       >
         <input
-          className="rounded-xl p-3 bg-slate-900 text-white text-sm"
+          className="rounded-2xl py-2 px-3 bg-slate-900 text-white text-sm"
           onChange={(e) => setIp(e.currentTarget.value)}
           placeholder="Enter 3DS IP:Port"
         />
-        <div class="inline-block rounded-2xl bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700">
+        <div
+          onClick={connect_tcp}
+          class="inline-block rounded-2xl bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+        >
           Connect
         </div>
       </form>
-      <div className="flex-row justify-center items-center bg-white m-10 space-y-2 rounded-xl">
+      <div className="flex-row justify-center items-center bg-white m-10 space-y-2 rounded-2xl">
         <Table files={files} />
       </div>
     </div>

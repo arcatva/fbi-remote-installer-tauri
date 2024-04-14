@@ -1,6 +1,8 @@
 use chrono::DateTime;
 use std::{fmt::Debug, os::windows::fs::MetadataExt, path::Path};
 use tokio::fs;
+
+
 #[derive(serde::Serialize, Debug)]
 pub struct FileMeta {
     file_name: String,
@@ -22,7 +24,7 @@ impl FileMeta {
     }
 }
 
-pub async fn list_files_with_path(path: &str) -> Result<Vec<FileMeta>, std::io::Error> {
+pub async fn list_files(path: &str) -> Result<Vec<FileMeta>, std::io::Error> {
     let path = Path::new(path);
     let mut entries = fs::read_dir(path).await?;
     let mut files = Vec::new();

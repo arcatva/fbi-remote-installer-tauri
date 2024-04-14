@@ -51,7 +51,7 @@ function Table({ files }) {
                     {element.file_size == 0 ? (
                       ""
                     ) : (
-                      <div class="rounded-2xl inline-block bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700">
+                      <div class="rounded-2xl inline-block  px-4 py-2 text-xs font-medium text-white bg-blue-300 hover:bg-blue-400 ">
                         Install
                       </div>
                     )}
@@ -88,18 +88,26 @@ function Table({ files }) {
               </svg>
             </div>
           </li>
-          {Array.from({ length: pageCount }, (_, i) => i + 1).map((index) => (
-            <li key={index}>
-              <div
-                onClick={() => {
-                  setPage(index);
-                }}
-                className="select-none cursor-pointer hover:ring-2 block size-8 rounded-2xl border border-gray-100 bg-white text-center leading-8 text-gray-900"
-              >
-                {index}
-              </div>
-            </li>
-          ))}
+          {Array.from({ length: pageCount }, (_, i) => i + 1).map((index) =>
+            index == page ? (
+              <li key={index}>
+                <div className="select-none  hover:ring-2 block size-8 rounded-2xl border border-gray-100 bg-blue-300 text-center leading-8 text-gray-100">
+                  {index}
+                </div>
+              </li>
+            ) : (
+              <li key={index}>
+                <div
+                  onClick={() => {
+                    setPage(index);
+                  }}
+                  className="select-none cursor-pointer hover:ring-2 block size-8 rounded-2xl border border-gray-100 bg-white text-center leading-8 text-gray-900"
+                >
+                  {index}
+                </div>
+              </li>
+            )
+          )}
 
           <li>
             <div

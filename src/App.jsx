@@ -20,7 +20,7 @@ function App() {
     list_files();
   }, []);
   return (
-    <div className="bg-slate-800 w-screen h-screen p-10">
+    <div className="bg-gray-700   w-screen h-screen p-10">
       <div className="text-center font-sans text-4xl text-white p-10">
         FBI Remote Installer Tauri
       </div>
@@ -39,7 +39,7 @@ function App() {
         />
         <div
           onClick={connect_tcp}
-          class="inline-block rounded-2xl bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+          class="inline-block rounded-2xl  bg-blue-300 hover:bg-blue-400  px-4 py-2 text-xs font-medium text-white  "
         >
           Connect
         </div>

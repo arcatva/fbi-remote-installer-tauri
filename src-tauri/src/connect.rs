@@ -40,7 +40,7 @@ pub async fn sendfile_tcp(addr: String, file_path: String) -> Result<String, Str
             break;
         }
         stream
-            .write_all(&buffer[..])
+            .write_all(&buffer[..n])
             .await
             .map_err(|e| e.to_string())?;
         total_read += n as u64;

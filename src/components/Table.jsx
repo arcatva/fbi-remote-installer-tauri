@@ -1,19 +1,20 @@
 import { useState } from "react";
-
+import Button from "./buttons/Button";
+import { tableStyle, tbodyStyle } from "../values/tableStyle";
 function TableHead() {
   return (
-    <thead class="text-center ">
+    <thead>
       <tr>
-        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+        <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
           Name
         </th>
-        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+        <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
           Size
         </th>
-        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+        <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
           Last Modified
         </th>
-        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+        <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
           Action
         </th>
       </tr>
@@ -21,39 +22,41 @@ function TableHead() {
   );
 }
 
-function Table({ files }) {
+function Table({ files, sendfile_tcp }) {
   const [page, setPage] = useState(1);
   const filesPerPage = 5;
   const pageCount = Math.ceil(files.length / filesPerPage);
   return (
     <>
-      <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm rounded-2xl ">
+      <table className={tableStyle}>
         <TableHead />
-        <tbody class="divide-y divide-gray-200 text-center ">
+        <tbody className={tbodyStyle}>
           {files.map((element, index) => {
             if (index < page * 5 && index >= (page - 1) * 5) {
               return (
                 <tr key={index}>
-                  <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                  <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
                     {element.file_size == 0
                       ? element.file_name + "/"
                       : element.file_name}
                   </td>
-                  <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                  <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                     {element.file_size == 0
                       ? ""
                       : element.file_size / 1000 + " KB"}
                   </td>
-                  <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                  <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                     {element.modified}
                   </td>
-                  <td class="whitespace-nowrap px-4 py-2">
+                  <td className="whitespace-nowrap px-4 py-2">
                     {element.file_size == 0 ? (
                       ""
                     ) : (
-                      <div class="rounded-2xl inline-block  px-4 py-2 text-xs font-medium text-white bg-blue-300 hover:bg-blue-400 ">
-                        Install
-                      </div>
+                      <Button
+                        text={"Install"}
+                        action={sendfile_tcp}
+                        param={element.file_name}
+                      />
                     )}
                   </td>
                 </tr>
@@ -62,8 +65,8 @@ function Table({ files }) {
           })}
         </tbody>
       </table>
-      <div class="border-t border-gray-200 px-4 py-2">
-        <ol class="flex justify-end gap-1 text-xs font-medium">
+      <div className="border-t border-gray-200 px-4 py-2">
+        <ol className="flex justify-end gap-1 text-xs font-medium">
           <li>
             <div
               onClick={() => {
@@ -71,12 +74,12 @@ function Table({ files }) {
                   setPage(page - 1);
                 }
               }}
-              class="select-none cursor-pointer hover:ring-2 inline-flex size-8 items-center justify-center rounded-2xl border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+              className="select-none cursor-pointer hover:ring-2 inline-flex size-8 items-center justify-center rounded-2xl border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
             >
-              <span class="sr-only">Prev Page</span>
+              <span className="sr-only">Prev Page</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-3 w-3"
+                className="h-3 w-3"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -116,12 +119,12 @@ function Table({ files }) {
                   setPage(page + 1);
                 }
               }}
-              class="select-none cursor-pointer hover:ring-2 inline-flex size-8 items-center justify-center rounded-2xl border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+              className="select-none cursor-pointer hover:ring-2 inline-flex size-8 items-center justify-center rounded-2xl border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
             >
-              <span class="sr-only">Next Page</span>
+              <span className="sr-only">Next Page</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-3 w-3"
+                className="h-3 w-3"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >

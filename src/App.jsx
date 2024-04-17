@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import Table from "./components/Table";
+import Button from "./components/buttons/Button";
 
 function App() {
   const [ip, setIp] = useState("");
@@ -11,14 +12,14 @@ function App() {
     console.log(result);
     setFiles(result);
   }
-  async function connect_tcp() {
+  async function connect_tcp(ip) {
     invoke("connect_tcp", { addr: ip })
       .then((result) => console.log(result))
       .catch((err) => console.log(err));
   }
 
-  async function sendfile_tcp() {
-    invoke("sendfile_tcp", { addr: ip, filePath: "test.txt" })
+  async function sendfile_tcp(filePath) {
+    invoke("sendfile_tcp", { addr: ip, filePath: filePath })
       .then((result) => console.log(result))
       .catch((err) => console.log(err));
   }
@@ -44,21 +45,10 @@ function App() {
           onChange={(e) => setIp(e.currentTarget.value)}
           placeholder="Enter 3DS IP:Port"
         />
-        <div
-          onClick={connect_tcp}
-          class="inline-block rounded-2xl  bg-blue-300 hover:bg-blue-400  px-4 py-2 text-xs font-medium text-white  "
-        >
-          Connect
-        </div>
-        <div
-          onClick={sendfile_tcp}
-          class="inline-block rounded-2xl  bg-blue-300 hover:bg-blue-400  px-4 py-2 text-xs font-medium text-white  "
-        >
-          Send
-        </div>
+        <Button text={"Connect"} action={connect_tcp} param={ip} />
       </form>
       <div className="flex-row justify-center items-center bg-white m-10 space-y-2 rounded-2xl">
-        <Table files={files} />
+        <Table files={files} sendfile_tcp={sendfile_tcp} />
       </div>
     </div>
   );

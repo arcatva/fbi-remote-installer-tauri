@@ -2,11 +2,15 @@ use std::net::SocketAddr;
 
 use bytes::Bytes;
 use http_body_util::{BodyExt, combinators::BoxBody, Full, StreamBody};
-use hyper::{Method, Request, Response};
+use hyper::{Method, Request, Response, StatusCode};
 use hyper::server::conn::http1;
 use hyper::service::service_fn;
 use hyper_util::rt::TokioIo;
+use tokio::fs::File;
 use tokio::net::{TcpListener, TcpStream};
+use tokio_util::io::ReaderStream;
+
+static NOTFOUND: &[u8] = b"Not Found";
 
 pub async fn connect_tcp(addr: String) -> Result<String, String> {
 	match TcpStream::connect(addr).await {
@@ -37,9 +41,9 @@ pub async fn sendfile(addr: String, file_path: String) -> Result<String, String>
 
 async fn response_examples(
 	req: Request<hyper::body::Incoming>,
-) -> Result<Response<BoxBody<Bytes, std::io::Error>>> {
+) -> hyper::Result<Response<BoxBody<Bytes, std::io::Error>>> {
 	match (req.method(), req.uri().path()) {
-		(&Method::GET, "/") | (&Method::GET, "/index.html") => simple_file_send(INDEX).await,
+		(&Method::GET, "/") | (&Method::GET, "/index.html") => simple_file_send("test.txt").await,
 		(&Method::GET, "/no_file.html") => {
 			// Test what happens when file cannot be found
 			simple_file_send("this_file_should_not_exist.html").await
@@ -56,7 +60,7 @@ fn not_found() -> Response<BoxBody<Bytes, std::io::Error>> {
 		.unwrap()
 }
 
-async fn simple_file_send(filename: &str) -> Result<Response<BoxBody<Bytes, std::io::Error>>> {
+async fn simple_file_send(filename: &str) -> hyper::Result<Response<BoxBody<Bytes, std::io::Error>>> {
 	// Open file for reading
 	let file = File::open(filename).await;
 	if file.is_err() {
@@ -70,8 +74,8 @@ async fn simple_file_send(filename: &str) -> Result<Response<BoxBody<Bytes, std:
 	let reader_stream = ReaderStream::new(file);
 
 	// Convert to http_body_util::BoxBody
-	let stream_body = StreamBody::new(reader_stream.map_ok(Frame::data));
-	let boxed_body = stream_body.boxed();
+	let stream_body = StreamBody::new(reader_stream);
+	let boxed_body = BoxBody::new(stream_body);
 
 	// Send response
 	let response = Response::builder()

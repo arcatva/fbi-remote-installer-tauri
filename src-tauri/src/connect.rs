@@ -3,10 +3,12 @@ use std::net::SocketAddr;
 use bytes::Bytes;
 use http_body_util::{BodyExt, combinators::BoxBody, Full, StreamBody};
 use hyper::{Method, Request, Response, StatusCode};
+use hyper::body::Frame;
 use hyper::server::conn::http1;
 use hyper::service::service_fn;
 use hyper_util::rt::TokioIo;
 use tokio::fs::File;
+use tokio::io::AsyncReadExt;
 use tokio::net::{TcpListener, TcpStream};
 use tokio_util::io::ReaderStream;
 
@@ -43,11 +45,7 @@ async fn response_examples(
 	req: Request<hyper::body::Incoming>,
 ) -> hyper::Result<Response<BoxBody<Bytes, std::io::Error>>> {
 	match (req.method(), req.uri().path()) {
-		(&Method::GET, "/") | (&Method::GET, "/index.html") => simple_file_send("test.txt").await,
-		(&Method::GET, "/no_file.html") => {
-			// Test what happens when file cannot be found
-			simple_file_send("this_file_should_not_exist.html").await
-		}
+		(&Method::GET, _) => simple_file_send(req.uri().path()).await,
 		_ => Ok(not_found()),
 	}
 }
@@ -68,19 +66,21 @@ async fn simple_file_send(filename: &str) -> hyper::Result<Response<BoxBody<Byte
 		return Ok(not_found());
 	}
 
-	let file: File = file.unwrap();
-
-	// Wrap to a tokio_util::io::ReaderStream
-	let reader_stream = ReaderStream::new(file);
+	let mut file: File = file.unwrap();
+	//let reader_stream = ReaderStream::new(file);
 
 	// Convert to http_body_util::BoxBody
-	let stream_body = StreamBody::new(reader_stream);
-	let boxed_body = BoxBody::new(stream_body);
+	//let stream_body = StreamBody::new(reader_stream.map_ok(Frame::data));
+	let mut buf = Vec::new();
+	file.read_to_end(&mut buf).await.unwrap();
+	let bytes = bytes::Bytes::from(buf);
+
+	//let boxed_body = stream_body.boxed();
 
 	// Send response
 	let response = Response::builder()
 		.status(StatusCode::OK)
-		.body(boxed_body)
+		.body(Full::new(bytes).map_err(|e| match e {}).boxed())
 		.unwrap();
 
 	Ok(response)

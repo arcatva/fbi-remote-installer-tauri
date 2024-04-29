@@ -42,9 +42,10 @@ function App() {
 		list_files();
 	}, []);
 	return (
-		<div className="bg-tertiary-container w-screen h-screen p-4">
+		<div className="bg-tertiary-container min-w-full min-h-screen p-4">
 			<Banner level={bannerStatus} message={bannerMessage}/>
-			<div className="text-center font-sans text-4xl text-on-tertiary-container p-6">
+			<div
+				className="text-center font-sans text-3xl text-on-tertiary-container p-6">
 				FBI Remote Installer Tauri
 			</div>
 

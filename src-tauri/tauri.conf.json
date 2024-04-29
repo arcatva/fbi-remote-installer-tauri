@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "fbi-remote-installer-tauri",
-    "version": "0.0.0"
+    "version": "1.0.0"
   },
   "tauri": {
     "allowlist": {
@@ -22,7 +22,7 @@
         "title": "fbi-remote-installer-tauri",
         "width": 800,
         "height": 600,
-        "resizable": false
+        "resizable": true
       }
     ],
     "security": {

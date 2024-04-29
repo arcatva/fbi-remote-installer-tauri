@@ -37,12 +37,12 @@ function Table({files, sendfile}) {
 						return (
 							<tr key={index}>
 								<td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-									{element.file_size == 0
+									{element.file_size === 0
 										? element.file_name + "/"
 										: element.file_name}
 								</td>
 								<td className="whitespace-nowrap px-4 py-2 text-gray-700">
-									{element.file_size == 0
+									{element.file_size === 0
 										? ""
 										: element.file_size / 1000 + " KB"}
 								</td>
@@ -50,7 +50,7 @@ function Table({files, sendfile}) {
 									{element.modified}
 								</td>
 								<td className="whitespace-nowrap px-4 py-2">
-									{element.file_size == 0 ? (
+									{element.file_size === 0 ? (
 										""
 									) : (
 										<Button
@@ -85,15 +85,15 @@ function Table({files, sendfile}) {
 								fill="currentColor"
 							>
 								<path
-									fill-rule="evenodd"
+									fillRule="evenodd"
 									d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-									clip-rule="evenodd"
+									clipRule="evenodd"
 								/>
 							</svg>
 						</div>
 					</li>
 					{Array.from({length: pageCount}, (_, i) => i + 1).map((index) =>
-						index == page ? (
+						index === page ? (
 							<li key={index}>
 								<div
 									className="select-none  hover:ring-2 block size-8 rounded-2xl border border-gray-100 bg-blue-300 text-center leading-8 text-gray-100">
@@ -131,9 +131,9 @@ function Table({files, sendfile}) {
 								fill="currentColor"
 							>
 								<path
-									fill-rule="evenodd"
+									fillRule="evenodd"
 									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-									clip-rule="evenodd"
+									clipRule="evenodd"
 								/>
 							</svg>
 						</div>

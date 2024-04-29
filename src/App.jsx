@@ -42,10 +42,9 @@ function App() {
 		list_files();
 	}, []);
 	return (
-		<div className="bg-gray-700 w-screen h-screen p-10">
+		<div className="bg-tertiary-container w-screen h-screen p-4">
 			<Banner level={bannerStatus} message={bannerMessage}/>
-
-			<div className="text-center font-sans text-4xl text-white p-10">
+			<div className="text-center font-sans text-4xl text-on-tertiary-container p-6">
 				FBI Remote Installer Tauri
 			</div>
 
@@ -57,14 +56,14 @@ function App() {
 				}}
 			>
 				<input
-					className="rounded-2xl py-2 px-3 bg-slate-900 text-white text-sm"
+					className="rounded-2xl py-2 px-3 bg-primary text-on-primary placeholder-on-primary  text-xs"
 					onChange={(e) => setIp(e.currentTarget.value)}
 					placeholder="Enter 3DS IP:Port"
 
 				/>
 
 			</form>
-			<div className="flex-row justify-center items-center bg-white m-10 space-y-2 rounded-2xl">
+			<div className="flex-row justify-center items-center bg-primary m-6 space-y-2 rounded-2xl">
 				<Table files={files} sendfile={send_file}/>
 			</div>
 		</div>

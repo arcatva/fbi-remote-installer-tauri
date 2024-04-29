@@ -1,21 +1,21 @@
 import {useState} from "react";
 import Button from "./buttons/Button";
-import {tableStyle, tbodyStyle} from "../values/tableStyle";
+import formatBytes from "../utils/formatBytes.js";
 
 function TableHead() {
 	return (
 		<thead>
 		<tr>
-			<th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+			<th className="whitespace-nowrap px-4 py-2 font-medium text-on-primary">
 				Name
 			</th>
-			<th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+			<th className="whitespace-nowrap px-4 py-2 font-medium text-on-primary">
 				Size
 			</th>
-			<th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+			<th className="whitespace-nowrap px-4 py-2 font-medium text-on-primary">
 				Last Modified
 			</th>
-			<th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+			<th className="whitespace-nowrap px-4 py-2 font-medium text-on-primary">
 				Action
 			</th>
 		</tr>
@@ -29,24 +29,22 @@ function Table({files, sendfile}) {
 	const pageCount = Math.ceil(files.length / filesPerPage);
 	return (
 		<>
-			<table className={tableStyle}>
+			<table className={"bg-primary text-sm rounded-2xl table-fixed w-full"}>
 				<TableHead/>
-				<tbody className={tbodyStyle}>
+				<tbody className={"text-center"}>
 				{files.map((element, index) => {
 					if (index < page * 5 && index >= (page - 1) * 5) {
 						return (
-							<tr key={index}>
-								<td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-									{element.file_size === 0
-										? element.file_name + "/"
-										: element.file_name}
+							<tr key={index} className="text-xs font-sans">
+								<td className="whitespace-nowrap px-4 py-2  font-medium overflow-hidden overflow-ellipsis">
+									{element.file_name}
 								</td>
-								<td className="whitespace-nowrap px-4 py-2 text-gray-700">
+								<td className="whitespace-nowrap px-4 py-2 ">
 									{element.file_size === 0
 										? ""
-										: element.file_size / 1000 + " KB"}
+										: formatBytes(element.file_size)}
 								</td>
-								<td className="whitespace-nowrap px-4 py-2 text-gray-700">
+								<td className="whitespace-nowrap px-4 py-2">
 									{element.modified}
 								</td>
 								<td className="whitespace-nowrap px-4 py-2">
@@ -66,7 +64,7 @@ function Table({files, sendfile}) {
 				})}
 				</tbody>
 			</table>
-			<div className="border-t border-gray-200 px-4 py-2">
+			<div className="px-4 py-2">
 				<ol className="flex justify-end gap-1 text-xs font-medium">
 					<li>
 						<div
@@ -75,7 +73,7 @@ function Table({files, sendfile}) {
 									setPage(page - 1);
 								}
 							}}
-							className="select-none cursor-pointer hover:ring-2 inline-flex size-8 items-center justify-center rounded-2xl border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+							className={page === 1 ? "select-none inline-flex size-8 items-center justify-center rounded-2xl" : "select-none cursor-pointer inline-flex size-8 items-center justify-center rounded-2xl interactive-bg-primary-container"}
 						>
 							<span className="sr-only">Prev Page</span>
 							<svg
@@ -96,7 +94,7 @@ function Table({files, sendfile}) {
 						index === page ? (
 							<li key={index}>
 								<div
-									className="select-none  hover:ring-2 block size-8 rounded-2xl border border-gray-100 bg-blue-300 text-center leading-8 text-gray-100">
+									className="select-none bg-primary-container block size-8 rounded-2xl  text-center leading-8 ">
 									{index}
 								</div>
 							</li>
@@ -106,7 +104,7 @@ function Table({files, sendfile}) {
 									onClick={() => {
 										setPage(index);
 									}}
-									className="select-none cursor-pointer hover:ring-2 block size-8 rounded-2xl border border-gray-100 bg-white text-center leading-8 text-gray-900"
+									className="select-none cursor-pointer  block size-8 rounded-2xl  text-center leading-8"
 								>
 									{index}
 								</div>
@@ -121,7 +119,7 @@ function Table({files, sendfile}) {
 									setPage(page + 1);
 								}
 							}}
-							className="select-none cursor-pointer hover:ring-2 inline-flex size-8 items-center justify-center rounded-2xl border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+							className={page === pageCount ? "select-none inline-flex size-8 items-center justify-center rounded-2xl" : "select-none cursor-pointer inline-flex size-8 items-center justify-center rounded-2xl interactive-bg-primary-container"}
 						>
 							<span className="sr-only">Next Page</span>
 							<svg

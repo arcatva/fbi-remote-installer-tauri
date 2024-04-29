@@ -3,7 +3,7 @@ function Banner({level, message}) {
 		case 'info':
 			return (
 				<div
-					className="flex items-center p-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400"
+					className="flex items-center p-4 text-sm rounded-lg interactive-bg-tertiary"
 					role="alert">
 					<svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
 						 xmlns="http://www.w3.org/2000/svg"
@@ -20,7 +20,7 @@ function Banner({level, message}) {
 		case 'danger':
 			return (
 				<div
-					className="flex items-center p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+					className="flex items-center p-4 text-sm  rounded-lg interactive-bg-error"
 					role="alert">
 					<svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
 						 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -36,7 +36,7 @@ function Banner({level, message}) {
 		case 'success':
 			return (
 				<div
-					className="flex items-center p-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+					className="flex items-center p-4 text-sm interactive-bg-tertiary rounded-lg "
 					role="alert">
 					<svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
 						 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">

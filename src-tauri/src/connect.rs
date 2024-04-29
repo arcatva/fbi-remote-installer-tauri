@@ -1,5 +1,6 @@
-use std::net::SocketAddr;
-
+use std::net::{Ipv4Addr, SocketAddr, UdpSocket};
+use std::path::PathBuf;
+use byteorder::{ByteOrder, BigEndian};
 use bytes::Bytes;
 use http_body_util::{BodyExt, combinators::BoxBody, Full, StreamBody};
 use hyper::{Method, Request, Response, StatusCode};
@@ -8,8 +9,8 @@ use hyper::server::conn::http1;
 use hyper::service::service_fn;
 use hyper_util::rt::TokioIo;
 use tokio::fs::File;
-use tokio::io::AsyncReadExt;
-use tokio::net::{TcpListener, TcpStream};
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
+use tokio::net::{TcpListener, TcpSocket, TcpStream};
 use tokio_util::io::ReaderStream;
 
 static NOTFOUND: &[u8] = b"Not Found";
@@ -23,9 +24,21 @@ pub async fn connect_tcp(addr: String) -> Result<String, String> {
 
 
 pub async fn sendfile(addr: String, file_path: String) -> Result<String, String> {
-	//let stream = TcpStream::connect(addr).await.map_err(|e| { e.to_string() })?;
-	let addr = SocketAddr::from(([127, 0, 0, 1], 3333));
-	let listener = TcpListener::bind(addr).await.map_err(|e| { e.to_string() })?;
+
+
+
+	let mut conn = TcpStream::connect(addr).await.map_err(|e| { e.to_string() })?;
+	let server_port = 3333;
+	let server_addr = SocketAddr::from((conn.local_addr().unwrap().ip(), server_port));
+	let listener = TcpListener::bind(server_addr).await.map_err(|e| { e.to_string() })?;
+	let url = format!("http://{}:{}/{}",conn.local_addr().unwrap().ip(),server_port,file_path);
+	println!("{}",url);
+	let mut len_bytes = [0u8; 4];
+	BigEndian::write_u32(&mut len_bytes, url.len() as u32);
+	let mut buffer = len_bytes.to_vec();
+	buffer.extend_from_slice(url.as_bytes());
+	conn.write_all(&buffer).await.map_err(|e| { e.to_string() })?;
+	
 	let (stream, _) = listener.accept().await.map_err(|e| { e.to_string() })?;
 	let io = TokioIo::new(stream);
 	tokio::task::spawn(async move {
@@ -36,8 +49,6 @@ pub async fn sendfile(addr: String, file_path: String) -> Result<String, String>
 			println!("Failed to serve connection: {:?}", err);
 		}
 	});
-
-
 	Ok("Installed".to_string())
 }
 
@@ -60,6 +71,8 @@ fn not_found() -> Response<BoxBody<Bytes, std::io::Error>> {
 
 async fn simple_file_send(filename: &str) -> hyper::Result<Response<BoxBody<Bytes, std::io::Error>>> {
 	// Open file for reading
+
+	let filename = PathBuf::from(format!(".{}", filename));
 	let file = File::open(filename).await;
 	if file.is_err() {
 		eprintln!("ERROR: Unable to open file.");
@@ -85,3 +98,6 @@ async fn simple_file_send(filename: &str) -> hyper::Result<Response<BoxBody<Byte
 
 	Ok(response)
 }
+
+
+

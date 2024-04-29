@@ -23,7 +23,6 @@ function App() {
 
 	async function list_files() {
 		let result = await invoke("list_files");
-		console.log(result);
 		setFiles(result);
 	}
 

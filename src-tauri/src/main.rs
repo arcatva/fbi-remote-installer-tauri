@@ -11,8 +11,8 @@ mod connect;
 mod file;
 
 #[tauri::command(async)]
-async fn list_files() -> Result<Vec<file::FileMeta>, ()> {
-	Ok(file::list_files(".").await.unwrap())
+async fn list_files() -> Result<Vec<file::FileMeta>, String> {
+	Ok(file::list_files(".").await?)
 }
 
 

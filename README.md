@@ -1,7 +1,11 @@
-# Tauri + React
+# FBI Remote Installer Tauri
 
-This template should help get you started developing with Tauri and React in Vite.
+A Tauri-based app for installing CIA remotely on your PC.
+HIGHLY EXPERIMENTAL!!!
 
-## Recommended IDE Setup
+## Usage
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+Place the .cia files under the same folder of this app
+Open FBI remote install on 3DS
+Input 3DS ip and port, such as 192.168.0.5:5000
+Click on Install and wait for installation :)

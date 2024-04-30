@@ -1,7 +1,6 @@
 # FBI Remote Installer Tauri
 
-A Tauri-based app for installing CIA remotely on your PC.
-HIGHLY EXPERIMENTAL!!!
+A Tauri-based app for installing CIA remotely from your PC.
 
 ## Usage
 
